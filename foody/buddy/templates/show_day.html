@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block content %}
+    <p>{{m}}월{{d}}일의 식단</p>
+    <p>
+        <table border='1'>
+            <tr>
+                <td>아침</td>
+            </tr>                
+            {% for f in morning_food%}
+            <tr>
+                <td>{{f}}</td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td>점심</td>
+            </tr>                
+            {% for f in lunch_food%}
+            <tr>
+                <td>{{f}}</td>
+            </tr>
+            {% endfor %}
+            
+        </table>
+    </p>
+    <a href="/buddy/show?month={{m}}">뒤로가기</a>
+{% endblock %}

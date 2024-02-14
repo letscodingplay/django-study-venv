@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+    <p>{{m}}월의 식단</p>
+    <p>
+        <ul>
+        {% for i in day_list%}
+            <li>
+                <a href="/buddy/show/day?month={{m}}&day={{i}}">{{m}}월{{i}}일</a>
+            </li>
+        {%endfor%}
+        </ul>
+    </p>
+{% endblock %}
