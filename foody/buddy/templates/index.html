@@ -3,13 +3,11 @@
     <p>성적조회</p>
     <p>학생의 이름을 선택하세요</p>
     <p>
-        <ul>
+        <div class="list-group">
         {% for std in students%}
-            <li>
-                <a href="/buddy/show?id={{std.id}}">{{std.student_name}}</a>
-            </li>
+            <a href="/buddy/show?id={{std.id}}" class="list-group-item">{{std.student_name}}</a>            
         {%endfor%}
-        </ul>
+        </div>
     </p>
     
 {% endblock %}

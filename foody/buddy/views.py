@@ -84,7 +84,9 @@ class AskBirth(View):
                 messages.error(self.request, '다시 확인해 주세요.', extra_tags='danger')
                 context={'message':messages, 'student': student}
                 return render(request, self.template_name, context)
-            else :            
+            else :
+                student.student_id = student_id
+                student.save()
                 return HttpResponseRedirect(reverse_lazy('buddy:show', args=(id)))
     def valid(self, birth, std_id):
         codes = birth + std_id

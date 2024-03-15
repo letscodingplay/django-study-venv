@@ -5,22 +5,26 @@
 <form method="post">
     {% csrf_token %}
     <input type="hidden" name="id" value="{{student.id}}"/>
-    <p>
-    <label for="student_birth">주민번호 앞자리:</label>
-    <input type="text" name="birth" placeholder="120314" id="student_birth" />
-    </p>
-    <p>
-    <label for="student_id">주민번호 뒷자리:</label>
-    <input type="text" name="student_id" placeholder="3485123" id="student_id"/>
-    </p>
+    <div class="input-group">
+        <div class="input-group-prepend">
+            <span class="input-group-text">주민번호 앞자리:</span>
+        </div>
+        <input type="text" name="birth" placeholder="120314" id="student_birth" class="input-group-text"/>
+    </div>
+    <div class="input-group">
+        <div class="input-group-prepend">
+            <span class="input-group-text">주민번호 뒷자리:</span>
+        </div>
+        <input type="text" name="student_id" placeholder="3485123" id="student_id" class="input-group-text"/>
+    </div>
     {% if messages %}
         {% for message in messages %}
             <p style="color:red">{{message}}</p>
         {% endfor %}
     {% endif %}
     <p>
-    <input type="submit" value="성적조회"/>
+        <input type="submit" value="성적조회" class="btn btn-primary"/>    
+        <a href="{% url 'buddy:index' %}" class="btn btn-list">첫화면으로</a>
     </p>
-    <a href="{% url 'buddy:index' %}">첫화면으로</a>
 </form>
 {% endblock %}

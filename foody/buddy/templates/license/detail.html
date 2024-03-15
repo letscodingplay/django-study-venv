@@ -1,22 +1,31 @@
 {% extends 'base.html' %}
 {% block content %}
-<p>
-    이름 : {{student.student_name}}
-</p>
-<p>
-    성적 : {{student.score}}
-</p>
-<p>
-    등급 : {{student.grade}}
-</p>
-{% if student.score >= 200%}
-<p>
-    합격을 축하합니다.
-</p>
-{% else %}
-<p>
-    아쉽지만 불합격 했습니다.
-</p>
-{% endif %}
-<a href="{% url 'buddy:index' %}">첫화면으로</a>
+<div class="table-responsive">
+<table class="table table-striped">
+    <tr>
+        <td>이름</td>
+        <td>{{student.student_name}}</td>
+    </tr>
+    <tr>
+        <td>성적</td>
+        <td>{{student.score}}</td>
+    </tr>
+    <tr>
+        <td>등급</td>
+        <td>{{student.grade}}</td>
+    </tr>
+    <tr>
+    {% if student.score >= 200%}
+        <td colspan="2">
+            합격을 축하합니다.
+        </td>
+        {% else %}
+        <td colspan="2">
+            아쉽지만 불합격 했습니다.
+        </td>
+    {% endif %}
+    </tr>
+</table>
+</div>
+<a href="{% url 'buddy:index' %}" class="btn btn-link">첫화면으로</a>
 {% endblock %}
