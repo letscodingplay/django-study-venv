@@ -68,7 +68,7 @@ class AskBirth(View):
         student_id = request.POST.get('student_id', '')
         student = License.objects.get(pk=id)
         
-        if len(birth) == 0 or len(student_id) == 0:
+        if len(birth) == 0 or len(student_id) == 0 or birth.isdecimal() == False or student_id.isdecimal() == False:
             messages.error(self.request, '다시 확인해 주세요.', extra_tags='danger')
             context={'message':messages, 'student': student}
             return render(request, self.template_name, context)
@@ -80,6 +80,7 @@ class AskBirth(View):
             
             if result == False:
                 print("올바르게 입력하지 않음")
+                
                 messages.error(self.request, '다시 확인해 주세요.', extra_tags='danger')
                 context={'message':messages, 'student': student}
                 return render(request, self.template_name, context)
