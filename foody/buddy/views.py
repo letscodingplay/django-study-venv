@@ -1,17 +1,104 @@
-from django.shortcuts import render
-from django.views.generic import View
+from django.shortcuts import render, get_object_or_404
+from django.views.generic import View, DetailView
 from django.http import HttpResponse
-
+from buddy.models import License
+from buddy.forms import LicenseForm
+from django.http import HttpResponse, HttpResponseRedirect
+from django.urls import reverse_lazy, reverse
+from django.contrib import messages
 
 class Index(View):
+    
     template_name = 'index.html'
 
     def get(self, request):
-        monthList = [i for i in range(1, 13)]
-        context = {"month": monthList}
-        return render(request, self.template_name, 
-                      context)
+        licences = License.objects.all().order_by('student_name')
+        context={'students':licences}
+        return render(request, self.template_name, context)
+
+class Insert(View):
+    form_class = LicenseForm
+    model = License
+    template_name = 'license/insert.html'
+    def get(self, request):
+        form = self.form_class()
+        return render(request, self.template_name,
+                      context={
+                          'form':form,
+                          'message':'',
+                          'next':request.GET.get('next')
+                      })
+    def post(self, request):
+        print("insert post")
+        form = self.form_class(request.POST)
         
+        if form.is_valid():
+            cleaned_data = form.clean()
+            name = cleaned_data.get("student_name")
+            print(f"name:{name}")
+            score = cleaned_data.get("score")
+            birth = cleaned_data.get("student_birth")
+            license = License(student_name=name, score=score, student_birth=birth)
+            license.save()
+            
+        return HttpResponseRedirect(reverse_lazy('buddy:index'))
+class AskBirth(View):
+    template_name='license/ask_birth.html'
+    
+    def get(self, request):
+        param = request.GET.get('id', '')
+        student = License.objects.get(pk=param)
+        context={'student':student}
+        return render(request, self.template_name, context)
+    
+    def post(self, request):
+        id = request.POST.get('id',-1)
+        birth = request.POST.get('birth', '')
+        student_id = request.POST.get('student_id', '')
+        
+        print(f"id:{id}/birth:{birth}/student_id:{student_id}")
+        student = License.objects.get(pk=id)
+        isValid = self.valid(birth, student_id)
+        result = (student.student_birth == birth) and isValid
+        
+        if result == False:
+            print("올바르게 입력하지 않음")
+            messages.error(self.request, '다시 확인해 주세요.', extra_tags='danger')
+            context={'message':messages, 'student': student}
+            return render(request, self.template_name, context)
+        else :            
+            return HttpResponseRedirect(reverse_lazy('buddy:show', args=(id)))
+    def valid(self, birth, std_id):
+        codes = birth + std_id
+        nums = [2,3,4,5,6,7,8,9]
+        sum = 0
+        for i in range(len(codes)-1):
+            sum += int(codes[i]) * (nums[i % len(nums)])
+        validCode = sum % 11
+        if validCode >= 10:
+            validCode = validCode % 10
+        else :
+            validCode = 11 - validCode
+        return validCode == int(codes[-1])
+        
+class ShowScore(DetailView):
+    model = License
+    template_name = 'license/detail.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        student = get_object_or_404(License, pk = self.kwargs['pk'])
+        if student.score >= 400 :
+            student.grade = 'A'
+        elif student.score >= 300 :
+            student.grade = 'B'
+        elif student.score >= 200 :
+            student.grade = 'C'
+        context['student']= student
+        return context
+    
+    
+    
 class ShowMonth(View):
     template_name = 'show_month.html'
     

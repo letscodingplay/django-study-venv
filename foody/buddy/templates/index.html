@@ -1,13 +1,16 @@
 {% extends 'base.html' %}
 {% block content %}
-    <p>OO학교의 식단표</p>
+    <a href="{% url 'buddy:insert'%}">입력</a>
+    <p>성적조회</p>
+    <p>학생의 이름을 선택하세요</p>
     <p>
         <ul>
-        {% for i in month%}
+        {% for std in students%}
             <li>
-                <a href="/buddy/show?month={{i}}">{{i}}월</a>
+                <a href="/buddy/show?id={{std.id}}">{{std.student_name}}</a>
             </li>
         {%endfor%}
         </ul>
     </p>
+    
 {% endblock %}

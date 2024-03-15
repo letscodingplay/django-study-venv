@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+{{student.student_name}} 학생의 주민등록번호 정보를 입력해 주세요.
+
+<form method="post">
+    {% csrf_token %}
+    <input type="hidden" name="id" value="{{student.id}}"/>
+    <p>
+    <label for="student_birth">주민번호 앞자리:</label>
+    <input type="text" name="birth" placeholder="120314" id="student_birth"
+        {% if messages %}
+        value="{{ student.student_birth }}"
+        {% endif %}
+        />
+    </p>
+    <p>
+    <label for="student_id">주민번호 뒷자리:</label>
+    <input type="text" name="student_id" placeholder="3485123" id="student_id"/>
+    </p>
+    {% if messages %}
+        {% for message in messages %}
+            <p style="color:red">{{message}}</p>
+        {% endfor %}
+    {% endif %}
+    <p>
+    <input type="submit" value="성적조회"/>
+    </p>
+    <a href="{% url 'buddy:index' %}">첫화면으로</a>
+</form>
+{% endblock %}
