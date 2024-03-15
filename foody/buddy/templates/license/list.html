@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+<ul>
+{% for license in licenses%}
+    <li>
+        {{license.student_name}} | {{license.score}} | {{license.student_birth}}
+    </li>
+{% endfor%}
+</ul>
+{% endblock %}

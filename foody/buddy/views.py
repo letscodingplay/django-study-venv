@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from django.views.generic import View, DetailView
+from django.views.generic import View, DetailView, ListView
 from django.http import HttpResponse
 from buddy.models import License
 from buddy.forms import LicenseForm
@@ -15,7 +15,18 @@ class Index(View):
         licences = License.objects.all().order_by('student_name')
         context={'students':licences}
         return render(request, self.template_name, context)
-
+    
+class ShowAll(ListView):
+    model = License
+    template_name = 'license/list.html'
+    ordering = 'student_name'
+    context_object_name = 'licenses'
+    
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        #return License.objects.order_by('student_name')
+        return context
+    
 class Insert(View):
     form_class = LicenseForm
     model = License
@@ -55,19 +66,23 @@ class AskBirth(View):
         id = request.POST.get('id',-1)
         birth = request.POST.get('birth', '')
         student_id = request.POST.get('student_id', '')
-        
-        print(f"id:{id}/birth:{birth}/student_id:{student_id}")
-        student = License.objects.get(pk=id)
-        isValid = self.valid(birth, student_id)
-        result = (student.student_birth == birth) and isValid
-        
-        if result == False:
-            print("올바르게 입력하지 않음")
+        if len(birth) == 0 or len(student_id) == 0:
             messages.error(self.request, '다시 확인해 주세요.', extra_tags='danger')
             context={'message':messages, 'student': student}
             return render(request, self.template_name, context)
-        else :            
-            return HttpResponseRedirect(reverse_lazy('buddy:show', args=(id)))
+        else:
+            print(f"id:{id}/birth:{birth}/student_id:{student_id}")
+            student = License.objects.get(pk=id)
+            isValid = self.valid(birth, student_id)
+            result = (student.student_birth == birth) and isValid
+            
+            if result == False:
+                print("올바르게 입력하지 않음")
+                messages.error(self.request, '다시 확인해 주세요.', extra_tags='danger')
+                context={'message':messages, 'student': student}
+                return render(request, self.template_name, context)
+            else :            
+                return HttpResponseRedirect(reverse_lazy('buddy:show', args=(id)))
     def valid(self, birth, std_id):
         codes = birth + std_id
         nums = [2,3,4,5,6,7,8,9]

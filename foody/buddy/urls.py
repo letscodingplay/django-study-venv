@@ -10,4 +10,5 @@ urlpatterns = [
     path("show/score/<int:pk>", views.ShowScore.as_view(), name="show"),
     path("barcode", views.getBarcodeData.as_view()),
     path("insert", views.Insert.as_view(), name="insert"),
+    path("show/all", views.ShowAll.as_view(), name="all"),
 ]
