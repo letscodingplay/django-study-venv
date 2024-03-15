@@ -66,13 +66,15 @@ class AskBirth(View):
         id = request.POST.get('id',-1)
         birth = request.POST.get('birth', '')
         student_id = request.POST.get('student_id', '')
+        student = License.objects.get(pk=id)
+        
         if len(birth) == 0 or len(student_id) == 0:
             messages.error(self.request, '다시 확인해 주세요.', extra_tags='danger')
             context={'message':messages, 'student': student}
             return render(request, self.template_name, context)
         else:
             print(f"id:{id}/birth:{birth}/student_id:{student_id}")
-            student = License.objects.get(pk=id)
+            
             isValid = self.valid(birth, student_id)
             result = (student.student_birth == birth) and isValid
             
