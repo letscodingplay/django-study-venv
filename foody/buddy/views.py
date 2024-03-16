@@ -90,7 +90,7 @@ class AskBirth(View):
             else :
                 student.student_id = student_id
                 student.save()
-                return HttpResponseRedirect(reverse_lazy('buddy:show', args=(id)))
+                return HttpResponseRedirect(reverse_lazy('buddy:show', args=(str(id),)))
     def valid(self, birth, std_id):
         codes = birth + std_id
         nums = [2,3,4,5,6,7,8,9]
