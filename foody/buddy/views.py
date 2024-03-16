@@ -76,6 +76,9 @@ class AskBirth(View):
             print(f"id:{id}/birth:{birth}/student_id:{student_id}")
             
             isValid = self.valid(birth, student_id)
+            print(f"isValid:{isValid}")
+            print(f"student.student_birth:{student.student_birth}")
+            
             result = (student.student_birth == birth) and isValid
             
             if result == False:
