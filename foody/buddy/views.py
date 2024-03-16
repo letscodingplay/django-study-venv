@@ -73,16 +73,16 @@ class AskBirth(View):
             context={'message':messages, 'student': student}
             return render(request, self.template_name, context)
         else:
-            print(f"id:{id}/birth:{birth}/student_id:{student_id}")
+            #print(f"id:{id}/birth:{birth}/student_id:{student_id}")
             
             isValid = self.valid(birth, student_id)
-            print(f"isValid:{isValid}")
-            print(f"student.student_birth:{student.student_birth}")
+            #print(f"isValid:{isValid}")
+            #print(f"student.student_birth:{student.student_birth}")
             
             result = (student.student_birth == birth) and isValid
             
             if result == False:
-                print("올바르게 입력하지 않음")
+                #print("올바르게 입력하지 않음")
                 
                 messages.error(self.request, '다시 확인해 주세요.', extra_tags='danger')
                 context={'message':messages, 'student': student}
@@ -98,10 +98,12 @@ class AskBirth(View):
         for i in range(len(codes)-1):
             sum += int(codes[i]) * (nums[i % len(nums)])
         validCode = sum % 11
+        #print(f"validCode:{validCode}")
+        
+        validCode = 11 - validCode
         if validCode >= 10:
             validCode = validCode % 10
-        else :
-            validCode = 11 - validCode
+
         return validCode == int(codes[-1])
         
 class ShowScore(DetailView):
