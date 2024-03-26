@@ -5,5 +5,6 @@ import buddy.views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('buddy/', include('buddy.urls')),
+    path('compiler/', include('compiler.urls')),
     path('', buddy.views.Index.as_view()),    
 ]

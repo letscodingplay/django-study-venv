@@ -31,6 +31,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'compiler',
     'buddy',
     'django.contrib.admin',
     'django.contrib.auth',
